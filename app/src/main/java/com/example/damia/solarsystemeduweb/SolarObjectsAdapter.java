@@ -2,9 +2,18 @@ package com.example.damia.solarsystemeduweb;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class SolarObjectsAdapter  extends RecyclerView.Adapter<SolarObjectsAdapter.SolarObjectViewHolder>{
 
@@ -23,7 +32,8 @@ public class SolarObjectsAdapter  extends RecyclerView.Adapter<SolarObjectsAdapt
 
     @Override
     public void onBindViewHolder(@NonNull SolarObjectViewHolder solarObjectViewHolder, int i) {
-
+        SolarObject solarObject = solarObjects[i];
+        solarObjectViewHolder.setSolarObject(solarObject);
     }
 
     @Override
@@ -31,10 +41,44 @@ public class SolarObjectsAdapter  extends RecyclerView.Adapter<SolarObjectsAdapt
         return solarObjects.length;
     }
 
-    class SolarObjectViewHolder extends RecyclerView.ViewHolder{
-         public SolarObjectViewHolder(View itemView) {
-            super(itemView);
-        }
+    private void itemClicked(SolarObject solarObject) {
 
     }
+
+    class SolarObjectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        @BindView(R.id.itemImageView)
+        ImageView itemImageView;
+
+        @BindView(R.id.itemTextView)
+        TextView itemTextView;
+
+        private SolarObject solarObject;
+
+        public SolarObjectViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        public void setSolarObject(SolarObject solarObject) {
+            this.solarObject = solarObject;
+            itemTextView.setText(solarObject.getName());
+
+            Glide.with(itemImageView.getContext())
+                    .load("file:///android_asset/" + solarObject.getImage()).apply(new RequestOptions()
+                    .placeholder(R.drawable.planet_placeholder).fitCenter()).into(itemImageView);
+        }
+
+        public SolarObject getSolarObject() {
+            return solarObject;
+        }
+
+        @Override
+        public void onClick(View view) {
+            itemClicked(solarObject);
+        }
+    }
+
+
 }

@@ -33,11 +33,11 @@ public class SolarObjectsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_solar_objects, container, false);
-        unbinder = ButterKnife.bind(this, view);
+        ButterKnife.bind(this, view);
         return view;
     }
 
@@ -69,6 +69,6 @@ public class SolarObjectsFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        //unbinder.unbind();
     }
 }
