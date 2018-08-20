@@ -19,8 +19,14 @@ public class SolarObjectsAdapter  extends RecyclerView.Adapter<SolarObjectsAdapt
 
     private final SolarObject[] solarObjects;
 
+    private SolarObjectClickedListener solarObjectClickedListener;
+
     public SolarObjectsAdapter(SolarObject[] solarObjects) {
         this.solarObjects = solarObjects;
+    }
+
+    public void setSolarObjectClickedListener(SolarObjectClickedListener solarObjectClickedListener) {
+        this.solarObjectClickedListener = solarObjectClickedListener;
     }
 
     @NonNull
@@ -42,7 +48,9 @@ public class SolarObjectsAdapter  extends RecyclerView.Adapter<SolarObjectsAdapt
     }
 
     private void itemClicked(SolarObject solarObject) {
-
+        if(solarObjectClickedListener != null){
+            solarObjectClickedListener.solarObjectClicked(solarObject);
+        }
     }
 
     class SolarObjectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -66,7 +74,7 @@ public class SolarObjectsAdapter  extends RecyclerView.Adapter<SolarObjectsAdapt
             itemTextView.setText(solarObject.getName());
 
             Glide.with(itemImageView.getContext())
-                    .load("file:///android_asset/" + solarObject.getImage()).apply(new RequestOptions()
+                    .load(solarObject.getImagePath()).apply(new RequestOptions()
                     .placeholder(R.drawable.planet_placeholder).fitCenter()).into(itemImageView);
         }
 
@@ -78,6 +86,11 @@ public class SolarObjectsAdapter  extends RecyclerView.Adapter<SolarObjectsAdapt
         public void onClick(View view) {
             itemClicked(solarObject);
         }
+    }
+
+
+    public interface SolarObjectClickedListener {
+        void solarObjectClicked(SolarObject solarObject);
     }
 
 

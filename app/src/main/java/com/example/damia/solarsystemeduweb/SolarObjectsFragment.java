@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SolarObjectsFragment extends Fragment {
+public class SolarObjectsFragment extends Fragment implements SolarObjectsAdapter.SolarObjectClickedListener {
 
 
     public static final String OBJECTS_KEY = "objects";
@@ -44,15 +45,12 @@ public class SolarObjectsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //TextView textView = (TextView) view.findViewById(R.id.objectTextView);
         SolarObject[] objects = (SolarObject[]) getArguments().getSerializable(OBJECTS_KEY);
 
         objectsRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        objectsRecyclerView.setAdapter(new SolarObjectsAdapter(objects));
-
-        /*for (SolarObject object : objects) {
-            textView.setText(textView.getText().toString() + object.getName());
-        }*/
+        SolarObjectsAdapter adapter = new SolarObjectsAdapter(objects);
+        adapter.setSolarObjectClickedListener(this);
+        objectsRecyclerView.setAdapter(adapter);
 
     }
 
@@ -70,5 +68,12 @@ public class SolarObjectsFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         //unbinder.unbind();
+    }
+
+    @Override
+    public void solarObjectClicked(SolarObject solarObject) {
+        Log.d(SolarObjectsFragment.class.getSimpleName(), "Clicked: " + solarObject.getName());
+
+        SolarObjectActivity.start(getActivity(), solarObject);
     }
 }
